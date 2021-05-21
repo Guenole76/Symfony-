@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title>Formulaire</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="">
+	</head>
+	<style>
+
+
+	</style>
+	<body>
+		
+        <h1>Formulaire</h1>
+
+
+        <form name='demo' method="post" action="form.php">
+			<label for='nom'>Nom de la carte:</label><br>
+			<input type='text' name='nom' id='nom' maxlength='30' required><br>
+			<span id='missNom'></span><br>
+			
+			<label for='prenom'> Extension: </label><br>
+			<input type='text' name='prenom' id='prenom' maxlength='30' required><br>
+			<span id='missPrenom'></span><br>
+
+			<label for='email'>Rareté :</label><br>
+			<input type='email' name='email' id='email' required><br>
+			<span id='missEmail'></span><br>
+
+			<label for='date'>NB possédé :</label><br>
+			<input type='date' id='start' name='date' value='2021-04-07' min='1960-04-07' max='2021-04-07'><br>
+			<span id='missDate'></span>
+
+			
+			
+        </form>
+		<pre id="log">
+		</pre>
+		
+		<script>
+
+			var formValid = document.getElementById('send');
+			var prenom = document.getElementById('prenom');
+			var missPrenom = document.getElementById('missPrenom');
+			var prenomValid = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?$/;
+
+			var nom = document.getElementById('nom');
+			var missNom= document.getElementById('missNom');
+			var nomValid = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?$/;
+
+			var email = document.getElementById('email');
+			var missEmail = document.getElementById('missEmail');
+			var emailValid = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+			var date = document.getElementById('start');
+			var missDate = document.getElementById('missDate');
+			var dateValid = /^(((0[1-9]|[12][0-9]|30)[-/]?(0[13-9]|1[012])|31[-/]?(0[13578]|1[02])|(0[1-9]|1[0-9]|2[0-8])[-/]?02)[-/]?[0-9]{4}|29[-/]?02[-/]?([0-9]{2}(([2468][048]|[02468][48])|[13579][26])|([13579][26]|[02468][048]|0[0-9]|1[0-6])00))$/;
+
+			var typesauce = document.getElementById('sauce');
+			var missTypesauce = document.getElementById('missSauce');
+			
+			var typepate = document.getElementById('choixpate');
+			var missTypepate = document.getElementById('missTypepate');
+			var pateValid = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?$/;
+
+			/*var form = document.querySelector("form");
+			var log = document.querySelector("#log");
+
+			form.addEventListener("submit", function(event) {
+			var data = new FormData(form);
+			var output = "";
+			for (const entry of data) {
+				output = entry[0] + "=" + entry[1] + "\r";
+			};
+			log.innerText = output;
+			event.preventDefault();
+			}, false);*/
+
+			formValid.addEventListener('click', validation);
+			
+			function validation(event){
+				
+				//on regarde si le nom est manquant ou non
+				if(nom.validity.valueMissing){
+					event.preventDefault();
+					missNom.textContent = 'Nom manquant';
+					missNom.style.color = 'red';
+				
+				}
+				//on regarde si le format du nom est correct
+				else if (nomValid.test(nom.value) == false){
+                    event.preventDefault();
+                    missNom.textContent = 'Format incorrect';
+                    missNom.style.color = 'orange';
+				}
+				// sinon on dit que le nom est valide
+				else{
+                    missNom.textContent = 'nom valide';
+                    missNom.style.color = 'green';
+				}
+
+				//on regarde si le prenom est manquant ou non
+				if(prenom.validity.valueMissing){
+					event.preventDefault();
+					missPrenom.textContent = 'Prenom manquant';
+					missPrenom.style.color = 'red';
+				}
+				//on regarde si le format du prenom est correct
+				else if (prenomValid.test(prenom.value) == false){
+                    event.preventDefault();
+                    missPrenom.textContent = 'Format incorrect';
+                    missPrenom.style.color = 'orange';
+				}
+				// sinon on dit que le prenom est valide
+				else{ 
+                    missPrenom.textContent = 'prenom valide';
+                    missPrenom.style.color = 'green';
+				}
+
+				//on regarde si l'email' est manquant ou non
+				if(email.validity.valueMissing){
+					event.preventDefault();
+					missEmail.textContent = 'Email manquant';
+					missEmail.style.color = 'red';
+				}
+				//on regarde si le format de l'email est correct
+				else if (emailValid.test(email.value) == false){
+                    event.preventDefault();
+                    missEmail.textContent = 'Format incorrect';
+                    missEmail.style.color = 'orange';
+				}
+				// sinon on dit que l'email' est valide
+				else{ 
+                    missEmail.textContent = 'email valide';
+                    missEmail.style.color = 'green';
+				}
+				
+
+				
+				
+
+				
+				if(document.querySelector('#frite').checked === true){
+					if(document.querySelector('#biggy').checked === false && document.querySelector('#blanche').checked === false && document.querySelector('#moutarde').checked === false && document.querySelector('#ketchup').checked === false && document.querySelector('#mayo').checked === false){
+						event.preventDefault();
+						missSauce.textContent = 'type de sauce manquant';
+						missSauce.style.color = 'red';
+					}
+					if(document.querySelector('#biggy').checked = true){
+						missSauce.textContent = 'sauce valide';
+						missSauce.style.color = 'green';
+					}
+				}
+				
+				if(document.querySelector('#pate').checked ===true){
+					if(typepate.value == ""){
+						event.preventDefault();
+						missTypepate.textContent = 'type de pate manquant';
+						missTypepate.style.color = 'red';
+					}
+					//on regarde si le format du type de pate est correct
+					else if (pateValid.test(typepate.value) == false){
+						event.preventDefault();
+						missTypepate.textContent = 'Format incorrect';
+						missTypepate.style.color = 'orange';
+					}
+					// sinon on dit que le type de pate est valide
+					else{ 
+						missTypepate.textContent = 'pate valide';
+						missTypepate.style.color = 'green';
+					}
+				}
+
+				
+			
+			}
+				
+		
+			
+			function ShowDiv (E)
+			{
+				document.getElementById("typedepate").style.display = (E == 1) ? 'block' : 'none';
+				document.getElementById("choixsauce").style.display = (E == 2) ? 'block' : 'none';
+			}
+			/*
+			function valButton(btn) {
+				var cnt = -1;
+				for (var i=btn.length-1; i > -1; i--) {
+					if (btn[i].checked) {cnt = i; i = -1;}
+				}
+				if (cnt > -1) return btn[cnt].value;
+				else return null;
+			}
+
+			var btn = valButton(form.frite);
+			if (btn == null) alert('No radio button selected');
+			else alert('Button value ' + btn + ' selected');*/
+			const form = document.forms.demo;
+			const radios = form.elements.frite;
+			console.log(radios);
+
+		</script>
+
+		
+	
+	</body>		
+</html>
