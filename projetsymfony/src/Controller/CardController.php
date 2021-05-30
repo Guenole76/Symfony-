@@ -14,6 +14,29 @@ class CardController extends AbstractController
 
 
 
+/**
+     * @Route("/pokemon/{id}", name="pokemon_show")
+     */
+    public function show(int $id): Response
+    {
+        $cards = $this->getDoctrine()
+            ->getRepository(Pokemon::class)
+            ->find($id);
+
+        if (!$cards) {
+            throw $this->createNotFoundException(
+                'No pokemon found for id '.$id
+            );
+        }
+
+        return new Response('Check out this great pokemon: '.$cards->getNom());
+
+        // or render a template
+        // in the template, print things with {{ product.name }}
+        // return $this->render('product/show.html.twig', ['product' => $product]);
+    }
+
+
     /**
      * @Route ("/pokemon")
      */
@@ -27,6 +50,50 @@ class CardController extends AbstractController
         [
             'cards' => $cards
         ]));
+    }
+
+    /**
+     * @Route("/pokemon/edit/{id}") 
+     */
+    public function update(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $cards = $entityManager->getRepository(Pokemon::class)->find($id);
+
+        if (!$cards) {
+            throw $this->createNotFoundException(
+                'No pokemon found for id '.$id
+            );
+        }
+
+        $cards->setNom('New product name!');
+        $entityManager->flush();
+
+        return $this->redirectToRoute('pokemon_show', [
+            'id' => $cards->getId()
+        ]);
+    }
+
+    /**
+     * @Route("/pokemon/remove/{id}") 
+     */
+    public function delete(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $cards = $entityManager->getRepository(Pokemon::class)->find($id);
+
+        if (!$cards) {
+            throw $this->createNotFoundException(
+                'No pokemon found for id '.$id
+            );
+        }
+
+        $entityManager->remove($cards);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('pokemon_show', [
+            'id' => $cards->getId()
+        ]);
     }
 
     /**

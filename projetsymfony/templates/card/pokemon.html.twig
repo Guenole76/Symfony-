@@ -12,8 +12,10 @@
 <div class="example-wrapper">
 
     {% for card in cards %}
-        {{ card.Nom }}<br/>
-        {{ card.type }}
+        Id:{{ card.id }}<br/>
+        Nom de la carte:{{ card.Nom }}<br/>
+        Extension de la carte:{{ card.type }}
+        
         <hr/>
     {% endfor %}
 
